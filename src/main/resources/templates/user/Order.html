@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/about.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:14 GMT -->
+<head th:replace="layout_user/layout :: head">
+
+</head>
+<head>
+    <style>
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        .status-0 {
+            color: red;
+            font-weight: bold;
+        }
+        .status-1 {
+            color: green;
+            font-weight: bold;
+        }
+        .status-2 {
+            color: gray;
+            font-weight: bold;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/user/styles/about.css">
+    <link rel="stylesheet" type="text/css" href="/user/styles/about_responsive.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+
+<body>
+<div class="super_container">
+    <header th:replace="layout_user/layout :: header"></header>
+
+    <div class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+        <div class="menu_close_container">
+            <div class="menu_close">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="search">
+            <form action="#" class="header_search_form menu_mm">
+                <input type="search" class="search_input menu_mm" placeholder="Search" required="required">
+                <button
+                        class="header_search_button d-flex flex-column align-items-center justify-content-center menu_mm">
+                    <i class="fa fa-search menu_mm" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="home">
+        <div class="breadcrumbs_container">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="breadcrumbs">
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li>About</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about">
+
+        <div class="container">
+            <div class="panel-heading h1 center">LỊCH SỬ ĐẶT HÀNG </div>
+            <table class="table table-striped table-bordered text-center">
+                <thead>
+                <tr>
+                    <th>Ngày đặt hàng</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết đơn hàng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order, state: ${orders}">
+                    <td>[[${order.createdate}]]</td>
+                    <td th:class="'status-' + ${order.statusorder}">
+                    <span th:switch="${order.statusorder}">
+                        <span th:case="0">Chưa thanh toán</span>
+                        <span th:case="1">Thanh toán thành công</span>
+                        <span th:case="2">Huỷ thanh toán</span>
+                    </span>
+                    </td>
+                    <td>
+                        <a th:href="@{|/order/detail/${order.id}|}" class="btn btn-default">
+                            <i class="bi bi-search"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="partners">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="partners_slider_container">
+                        <div class="owl-carousel owl-theme partners_slider">
+
+                            <div class="owl-item partner_item"><img src="/user/images/partner_1.png" alt></div>
+
+                            <div class="owl-item partner_item"><img src="/user/images/partner_2.png" alt></div>
+
+                            <div class="owl-item partner_item"><img src="/user/images/partner_3.png" alt></div>
+
+                            <div class="owl-item partner_item"><img src="/user/images/partner_4.png" alt></div>
+
+                            <div class="owl-item partner_item"><img src="/user/images/partner_5.png" alt></div>
+
+                            <div class="owl-item partner_item"><img src="/user/images/partner_6.png" alt></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="layout_user/layout :: footer">
+</div>
+<!--/////////////////////////////////  -->
+<div th:replace="layout_user/layout :: jquery"></div>
+</body>
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/about.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:19 GMT -->
+
+</html>

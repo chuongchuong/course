@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<!-- Mirrored from preview.colorlib.com/theme/unicat/about.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:14 GMT -->
+
+<head th:replace="layout_user/layout :: head"></head>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/user/styles/about.css">
+    <link rel="stylesheet" type="text/css" href="/user/styles/about_responsive.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="super_container">
+
+        <header th:replace="layout_user/layout :: header"></header>
+
+        <div class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+            <div class="menu_close_container">
+                <div class="menu_close">
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="home">
+            <div class="breadcrumbs_container">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="breadcrumbs">
+                                <ul>
+                                    <li><a href="index.html">Home</a></li>
+                                    <li>About</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="counter">
+            <div class="container">
+                <div class="row">
+                    <div class="col-6 mx-auto">
+                        <br>
+
+                        <form class="counter_form_content" th:object="${user}" method="post">
+
+                            <div class="counter_form_title">Đăng ký</div>
+
+                            <div class="form-group">
+                                <label th:for="email">Email:</label>
+                                <input type="text" class="counter_input" placeholder="Email" name="email" th:field="*{email}">
+                                <p class="text-danger error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label th:for="fullname">Fullname:</label>
+                                <input type="text" class="counter_input" placeholder="Fullname" name="fullname" th:field="*{fullname}">
+                                <p class="text-danger error-message" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label th:for="phone">Phone number:</label>
+                                <input type="text" class="counter_input" placeholder="Phone number" name="phone" th:field="*{phonenumber}">
+                                <p class="text-danger error-message" th:if="${#fields.hasErrors('phonenumber')}" th:errors="*{phonenumber}"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label th:for="username">Username:</label>
+                                <input type="text" class="counter_input" placeholder="Username" name="username" th:field="*{username}">
+                                <p class="text-danger error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label th:for="password">Password:</label>
+                                <input type="password" class="counter_input" placeholder="Password" name="password" th:field="*{password}">
+                                <p class="text-danger error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label th:for="confirm">Confirm password:</label>
+                                <input type="password" class="counter_input" placeholder="Confirm password" name="confirm">
+                            </div>
+
+                            <p class=".text-success error-message" th:text="${msg}" style="color: red"></p>
+
+                            <button type="submit" class="counter_form_button" th:attr="formaction='/register'">Đăng ký học viên</button>
+                            <div class="mt-4 mb-0 text-center">
+                                <h5>HAY</h5>
+                            </div>
+                            <button type="submit" class="counter_form_button" th:attr="formaction='/registerTeacher'">Đăng ký giảng viên</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+
+     <div th:replace="layout_user/layout :: footer">
+    </div>
+ <!--/////////////////////////////////  -->
+ <div th:replace="layout_user/layout :: jquery">
+    </div>
+    </div>
+</body>
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/about.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:19 GMT -->
+
+</html>

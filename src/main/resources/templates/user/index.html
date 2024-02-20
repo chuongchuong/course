@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+
+<head th:replace="~{layout_user/layout :: head}"></head>
+<head>
+    <link rel="stylesheet" type="text/css" href="/user/styles/main_styles.css">
+    <link rel="stylesheet" type="text/css" href="/user/styles/responsive.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+<div class="super_container">
+
+    <header th:replace="~{layout_user/layout :: header}"></header>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="home">
+        <div class="home_slider_container">
+
+            <div class="owl-carousel owl-theme home_slider">
+                <div class="home_slider_content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col text-center">
+                                <div class="home_slider_title">Hệ Thống Khóa Học Trực Tuyến</div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="features">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="section_title_container text-center">
+                        <h2 class="section_title">Chào Mừng Đến Với Khóa Học 145</h2>
+                        <div class="section_subtitle">
+                            <p>Đây là nơi mà bạn có thể tìm các khóa học online để trao dồi kiến thức của bản thân</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="courses">
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="section_title_container text-center">
+                        <h2 class="section_title">Các Khóa Học Khuyến Mãi</h2>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row courses_row">
+
+                <div class="col-lg-4 course_col" th:each="item, iterStat : ${sale}" >
+                    <div ><input type="hidden" class="sale-end-date"  th:value="${saleEndDates[iterStat.index]}">
+                        <h5 class="time-remaining">Time remaining here</h5></div>
+
+                    <div class="course">
+
+                        <div class="course_image"><img th:src="@{'http://localhost:8080/rest/files/files/'+${item.course.image}}" alt></div>
+                        <div class="course_body">
+                            <h3 class="course_title">
+                                <a th:href="@{/detail_course/{id}(id=${item.course.id})}" th:text="${item.course.coursename}"></a>
+                            </h3> <div class="course_teacher" th:text="${item.course.created_by.username}"></div>
+                            <div class="course_text">
+                                <p th:text="${item.course.category.categoryname}"></p>
+                            </div>
+                        </div>
+                        <div class="course_footer">
+                            <div
+                                    class="course_footer_content d-flex flex-row align-items-center justify-content-start">
+                                <div class="course_info">
+
+                                    <span> <a class="btn btn-warning" href="#" th:attr="ng-click=@{|cart.add(${item.course.id})|}" onclick="preventDefault(event)"> Add to cart</a></span>
+                                </div>
+
+                                <div  class="course_price ml-auto" th:text="${#numbers.formatDecimal(changePrices[iterStat.index], 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"></div>
+                                <del><div class="change_price ml-auto" th:text="${#numbers.formatDecimal(item.course.price, 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"></div></del>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="section_title_container text-center">
+                        <h2 class="section_title">Các Khóa Học Khác</h2>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row courses_row">
+
+                <div class="col-lg-4 course_col" th:each="item, iterStat : ${courses}" >
+                    <div class="course">
+                        <div class="course_image"><img th:src="@{'http://localhost:8080/rest/files/files/'+${item.image}}" alt></div>
+                        <div class="course_body">
+                            <h3 class="course_title">
+                                <a th:href="@{/detail_course/{id}(id=${item.id})}" th:text="${item.coursename}"></a>
+                            </h3> <div class="course_teacher" th:text="${item.created_by.username}"></div>
+                            <div class="course_text">
+                                <p th:text="${item.category.categoryname}"></p>
+                            </div>
+                        </div>
+                        <div class="course_footer">
+                            <div
+                                    class="course_footer_content d-flex flex-row align-items-center justify-content-start">
+                                <div class="course_info">
+                                    <span><a class="btn btn-warning" href="#" th:attr="ng-click=@{|cart.add(${item.id})|}" onclick="preventDefault(event)">Add to cart</a></span>
+                                </div>
+
+                                <div class="course_price ml-auto" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="courses_button trans_200"><a th:href="@{/courses}">view all courses</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <footer th:replace="~{layout_user/layout :: footer}">
+    </footer>
+    <!--/////////////////////////////////  -->
+</div>
+
+<div th:replace="~{layout_user/layout :: jquery}"></div>
+<!--    </div>-->
+</body>
+
+
+</html>
+<script src="/script/user/user_library.js"></script>
+<script src="/script/course_js.js"></script>
+<script th:src ="@{/script/shopping-cart-ctrl.js}"></script>
+
+<script src="/script/user/sales_timer.js"></script>
+<script>
+	function preventDefault(event) {
+		event.preventDefault();
+	}
+</script>

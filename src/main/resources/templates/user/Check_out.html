@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/courses.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:19 GMT -->
+<head th:replace="layout_user/layout :: head"></head>
+
+<head>
+ <link rel="stylesheet" type="text/css" href="/user/styles/courses.css">
+<link rel="stylesheet" type="text/css" href="/user/styles/courses_responsive.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+	<div class="super_container">
+
+		<header th:replace="layout_user/layout :: header"></header>
+
+		<div
+			class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+			<div class="menu_close_container">
+				<div class="menu_close">
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+			<div class="search">
+				<form action="#" class="header_search_form menu_mm">
+					<input type="search" class="search_input menu_mm"
+						placeholder="Search" required="required">
+					<button
+						class="header_search_button d-flex flex-column align-items-center justify-content-center menu_mm">
+						<i class="fa fa-search menu_mm" aria-hidden="true"></i>
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="home">
+			<div class="breadcrumbs_container">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="breadcrumbs">
+								<ul>
+									<li><a href="index.html">Home</a></li>
+									<li>Courses</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class=" container-fluid my-5 ">
+			<div class="row justify-content-center ">
+				<div class="col-xl-10">
+					<div class="card shadow-lg ">
+
+
+
+						<div class="row justify-content-around">
+							<div class="col-md-5">
+								<div class="card border-0">
+									<div class="card-header pb-0">
+										<h2 class="card-title space ">Checkout</h2>
+										<p class="card-text text-muted mt-4  space">THÔNG TIN THANH TOÁN</p>
+										<hr class="my-0">
+									</div>
+									<div class="card-body">
+
+										<div class="row mt-4">
+											<div class="col"><p class="text-muted mb-2">THÔNG TIN NGƯỜI DÙNG</p><hr class="mt-0"></div>
+										</div>
+										<div class="form-group">
+											<label  class="small text-muted mb-1">Tên</label>
+											<input type="text" class="form-control form-control-sm" name="NAME"  aria-describedby="helpId" placeholder="BBBootstrap Team">
+										</div>
+										<div class="form-group">
+											<label  class="small text-muted mb-1">Email</label>
+											<input type="text" class="form-control form-control-sm" name="NAME"  aria-describedby="helpId" placeholder="4534 5555 5555 5555">
+										</div>
+
+										<div class="form-group">
+											<label  class="small text-muted mb-1">SDT</label>
+											<input type="text" class="form-control form-control-sm" name="NAME"  aria-describedby="helpId" placeholder="4534 5555 5555 5555">
+										</div>
+										<div class="row mb-md-5">
+											<div class="col">
+												<button type="button" name="" id="" class="btn  btn-lg btn-block ">Thanh Toán</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="card border-0 ">
+									<div class="card-header card-2">
+										<p class="card-text text-muted mt-md-4  mb-2 space">YOUR ORDER <span class=" small text-muted ml-2 cursor-pointer">Giỏ hàng</span> </p>
+										<hr class="my-2">
+									</div>
+									<div class="card-body pt-0">
+										<div class="row  justify-content-between">
+											<div class="col-auto col-md-7">
+												<div class="media flex-column flex-sm-row">
+													<img class=" img-fluid" src="https://i.imgur.com/6oHix28.jpg" width="62" height="62">
+													<div class="media-body  my-auto">
+														<div class="row ">
+															<div class="col-auto"><p class="mb-0"><b>EC-GO Bag Standard</b></p><small class="text-muted">1 Week Subscription</small></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class=" pl-0 flex-sm-col col-auto  my-auto"> <p class="boxed-1">2</p></div>
+											<div class=" pl-0 flex-sm-col col-auto  my-auto "><p><b>179 SEK</b></p></div>
+										</div>
+										<hr class="my-2">
+
+
+										<hr class="my-2">
+										<div class="row ">
+											<div class="col">
+												<div class="row justify-content-between">
+													<div class="col-4"><p class="mb-1"><b>Subtotal</b></p></div>
+													<div class="flex-sm-col col-auto"><p class="mb-1"><b>179 SEK</b></p></div>
+												</div>
+
+												<div class="row justify-content-between">
+													<div class="col-4"><p ><b>Total</b></p></div>
+													<div class="flex-sm-col col-auto"><p  class="mb-1"><b>537 SEK</b></p> </div>
+												</div><hr class="my-0">
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="newsletter">
+			<div class="newsletter_background parallax-window"
+				data-parallax="scroll" data-image-src="images/newsletter.jpg"
+				data-speed="0.8"></div>
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div
+							class="newsletter_container d-flex flex-lg-row flex-column align-items-center justify-content-start">
+
+							<div class="newsletter_content text-lg-left text-center">
+								<div class="newsletter_title">sign up for news and offers</div>
+								<div class="newsletter_subtitle">Subcribe to lastest
+									smartphones news & great deals we offer</div>
+							</div>
+
+							<div class="newsletter_form_container ml-lg-auto">
+								<form action="#" id="newsletter_form"
+									class="newsletter_form d-flex flex-row align-items-center justify-content-center">
+									<input type="email" class="newsletter_input"
+										placeholder="Your Email" required="required">
+									<button type="submit" class="newsletter_button">subscribe</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<div th:replace="layout_user/layout :: footer"></div>
+		<!--/////////////////////////////////  -->
+		<div th:replace="layout_user/layout :: jquery"></div>
+</body>
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/courses.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:27 GMT -->
+</html>
+<script src="/script/course_js.js"></script>

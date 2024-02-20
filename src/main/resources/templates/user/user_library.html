@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout_user/layout :: head"></head>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="/user/styles/courses.css">
+	<link rel="stylesheet" type="text/css" href="/user/styles/courses_responsive.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+<div class="super_container">
+
+	<header th:replace="layout_user/layout :: header"></header>
+
+	<div
+			class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+		<div class="menu_close_container">
+			<div class="menu_close">
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+
+
+	</div>x
+
+	<div class="home">
+		<div class="breadcrumbs_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="breadcrumbs">
+							<ul>
+								<li><a href="index.html">Home</a></li>
+								<li>Courses</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="courses">
+
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8">
+					<div class="courses_search_container">
+						<form action="/library/timkiem" method="get" id="courses_search_form"
+							  class="courses_search_form d-flex flex-row align-items-center justify-content-start">
+							<input type="search" class="courses_search_input"
+								   placeholder="Search Courses" name="coursename">
+							<select id="courses_search_select" name="categoryId" class="courses_search_select courses_search_input">
+								<option value="0">All Categories</option>
+								<th:block th:each="category : ${cates}">
+									<option th:value="${category.id}" th:text="${category.categoryname}"></option>
+								</th:block>
+							</select>
+							<button type="submit" class="courses_search_button ml-auto">search now</button>
+						</form>
+
+
+					</div>
+					<div class="courses_container">
+						<div class="row courses_row">
+
+							<div class="col-lg-6 course_col" th:each="item : ${userCourses}">
+								<div class="course">
+									<div class="course_image">
+										<img th:src="@{'http://localhost:8080/rest/files/files/'+${item.course.image}}" alt="Image Description">
+									</div>
+									<div class="course_body">
+										<h3 class="course_title">
+											<a th:href="@{/library/video/{id}(id=${item.course.id})}" th:text="${item.course.coursename}"></a>
+										</h3>
+										<div class="course_teacher" th:text="${item.course.created_by.username}"></div>
+										<div class="course_text">
+
+											<p th:text="${item.course.category.categoryname}"></p>
+
+
+										</div>
+
+									</div>
+									<div class="course_footer">
+										<div  class="course_footer_content d-flex flex-row align-items-center justify-content-start">
+												<p th:text="'Tổng video: '+ ${video[item.course.id]}">total here</p>
+												<div class="ml-auto">
+													<p th:text="'Quiz đã hoàn thành: '+ ${quiz[item.course.id]}">total here</p>
+												</div>
+											</div>
+										<p class="text-success" th:if="${video[item.course.id]} ==${quiz[item.course.id]}"> Khóa học đã hoàn thành</p>
+										<p class="text-danger" th:if="${video[item.course.id]} !=${quiz[item.course.id]}"> Khóa học chưa hoàn thành</p>
+<br>
+									</div>
+								</div>
+							</div>
+
+							<!--	END OF COURSES-->
+
+
+
+						</div>
+						<div class="results" th:if="${totalPages > 1}">
+							<th:replace th:include="layout_user/paginateUrl:: ${paginationFragment}"></th:replace>
+						</div>
+
+						<div class="no-results" th:unless="${totalPages > 0}">
+							<p>No results found.</p>
+						</div>
+
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+
+</div>
+
+<div th:replace="layout_user/layout :: footer"></div>
+<!--/////////////////////////////////  -->
+<div th:replace="layout_user/layout :: jquery"></div>
+</body>
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/courses.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:27 GMT -->
+</html>
+<script src="/script/course_js.js"></script>
+
+
+
+<!-- Your other HTML content -->
+

@@ -1,0 +1,169 @@
+
+<!--Topbar-->
+<div class="navbar-custom" th:fragment="topbar">
+  <ul class="list-unstyled topnav-menu float-right mb-0">
+
+    <li class="dropdown d-none d-lg-block">
+      <a class="nav-link dropdown-toggle mr-0" data-toggle="dropdown" href="#" role="button"
+         aria-haspopup="false" aria-expanded="false">
+        <img src="/assets/images/flags/us.jpg" alt="user-image" class="mr-2" height="12"> <span
+              class="align-middle">English <i class="mdi mdi-chevron-down"></i> </span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <!-- item-->
+        <a href="javascript:void(0);" class="dropdown-item notify-item">
+          <img src="/assets/images/flags/spain.jpg" alt="user-image" class="mr-2" height="12"> <span
+                class="align-middle">Spanish</span>
+        </a>
+
+        <!-- item-->
+        <a href="javascript:void(0);" class="dropdown-item notify-item">
+          <img src="/assets/images/flags/italy.jpg" alt="user-image" class="mr-2" height="12"> <span
+                class="align-middle">Italian</span>
+        </a>
+
+        <!-- item-->
+        <a href="javascript:void(0);" class="dropdown-item notify-item">
+          <img src="/assets/images/flags/french.jpg" alt="user-image" class="mr-2" height="12"> <span
+                class="align-middle">French</span>
+        </a>
+
+        <!-- item-->
+        <a href="javascript:void(0);" class="dropdown-item notify-item">
+          <img src="/assets/images/flags/russia.jpg" alt="user-image" class="mr-2" height="12"> <span
+                class="align-middle">Russian</span>
+        </a>
+      </div>
+    </li>
+
+
+
+    <li class="dropdown notification-list">
+      <a class="nav-link dropdown-toggle nav-user mr-0" data-toggle="dropdown" href="#" role="button"
+         aria-haspopup="false" aria-expanded="false">
+        <img src="/assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+        <span class="pro-user-name ml-1" >
+                         <i class="mdi mdi-chevron-down"></i>
+                        </span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+        <!-- item-->
+        <div class="dropdown-header noti-title">
+          <h6 class="text-overflow m-0">Welcome !</h6>
+        </div>
+
+        <!-- item-->
+        <a href="javascript:void(0);" class="dropdown-item notify-item">
+
+          <span ><a th:href="@{/profile}">Profile</a></span>
+        </a>
+
+
+
+        <div class="dropdown-divider"></div>
+
+        <!-- item-->
+        <a href="javascript:void(0);" class="dropdown-item notify-item">
+
+          <span ><a th:href="@{/logout}">Logout</a></span>
+        </a>
+
+      </div>
+    </li>
+
+
+
+
+  </ul>
+
+  <!-- LOGO -->
+
+
+  <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+    <li>
+      <button class="button-menu-mobile">
+        <i class="mdi mdi-menu"></i>
+      </button>
+    </li>
+
+
+  </ul>
+</div>
+<!--End topbar-->
+<div class="left-side-menu" th:fragment="slidebar">
+
+
+  <div class="user-box">
+    <div class="float-left">
+      <img src="/assets/images/users/avatar-1.jpg" alt="" class="avatar-md rounded-circle">
+    </div>
+    <div class="user-info">
+      <a href="#" th:text="${#strings.length(#authentication.name) > 15 ? #strings.substring(#authentication.name, 0, 15) + '...' : #authentication.name}"></a>
+      <p class="text-muted m-0" th:text="${#authentication.authorities}">Administrator</p>
+    </div>
+  </div>
+
+  <!--- Sidemenu -->
+  <div id="sidebar-menu">
+
+    <ul class="metismenu" id="side-menu">
+
+      <li class="menu-title">Navigation</li>
+      <li>
+        <a th:href="@{/courses}">
+
+          <span> Trang khóa học </span>
+        </a>
+      </li>
+
+      <li>
+        <a th:href="@{/admin/dashboard}">
+          <i class="ti-home"></i>
+          <span> Home </span>
+        </a>
+      </li>
+
+
+
+
+
+
+
+      <li>
+        <a href="javascript: void(0);">
+          <i class="ti-pencil-alt"></i>
+          <span> Quản lý </span>
+          <span class="menu-arrow"></span>
+        </a>
+        <ul class="nav-second-level" aria-expanded="false">
+          <li><a th:href="@{/admin/courses}">Khóa học</a></li>
+          <li><a th:href="@{/admin/sales}">Khuyến mãi</a></li>
+          <li><a th:href="@{/admin/category}">Category</a></li>
+          <li th:if="${#strings.contains(#authentication.authorities, 'ROLE_ADMIN')}"><a th:href="@{/admin/users}">Người dùng</a></li> <!--admin only-->
+          <li th:if="${#strings.contains(#authentication.authorities, 'ROLE_ADMIN')}"><a th:href="@{/admin/teachers}">Giảng viên</a></li> <!--admin only-->
+
+          <li th:if="${#strings.contains(#authentication.authorities, 'ROLE_ADMIN')}"><a th:href="@{/admin/authority}">Phân quyền</a></li> <!--admin only-->
+          <li><a th:if="${#strings.contains(#authentication.authorities, 'ROLE_ADMIN')}" th:href="@{/admin/voucher}">Voucher</a></li>
+          <li><a href="https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm" target="_blank">Giao dịch</a></li>
+          <li><a th:href="@{/admin/support}">Hỗ trợ</a></li>
+        </ul>
+      </li>
+
+
+
+
+
+
+
+
+
+
+
+
+    </ul>
+
+  </div>
+  <div class="clearfix"></div>
+
+
+</div>

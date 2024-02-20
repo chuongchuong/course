@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/courses.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:19 GMT -->
+<head th:replace="layout_user/layout :: head"></head>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="/user/styles/courses.css">
+	<link rel="stylesheet" type="text/css" href="/user/styles/courses_responsive.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+		/* Ẩn danh sách ban đầu */
+		#listItems {
+			display: none;
+			overflow-y: auto; /* Cho phép cuộn nếu danh sách quá dài */
+		}
+	</style>
+</head>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+<div class="super_container" ng-controller="cart-ctrl">
+
+	<header th:replace="layout_user/layout :: header"></header>
+
+	<div
+			class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+		<div class="menu_close_container">
+			<div class="menu_close">
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+		<div class="search">
+			<form action="#" class="header_search_form menu_mm">
+				<input type="search" class="search_input menu_mm"
+					   placeholder="Search" required="required">
+				<button
+						class="header_search_button d-flex flex-column align-items-center justify-content-center menu_mm">
+					<i class="fa fa-search menu_mm" aria-hidden="true"></i>
+				</button>
+			</form>
+		</div>
+
+	</div>
+
+	<div class="home">
+		<div class="breadcrumbs_container">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<div class="breadcrumbs">
+							<ul>
+								<li><a href="index.html">Home</a></li>
+								<li>Courses</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container mt-5 p-3 rounded cart">
+		<div class="row no-gutters">
+			<div class="col-md-8">
+				<div class="product-details mr-2">
+					<hr>
+					<h6 class="mb-0">Shopping cart</h6>
+
+					<div ng-if="!cart.items.length" class="panel-body text-center">
+						<h3 style="font-variant: small-caps;">No items in your shopping cart</h3>
+					</div>
+
+					<div ng-if="cart.items.length">
+						<div class="d-flex justify-content-between"><span>Bạn có {{cart.count}} khoá học trong giỏ hàng</span>
+							<div class="d-flex flex-row align-items-center"><span class="text-black-50">Tổng Tiền:</span>
+								<div class="price ml-2"><span class="mr-1">{{cart.amount | number }} VNĐ</span><i class="fa fa-angle-down"></i></div>
+							</div>
+						</div>
+
+
+						<div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded" ng-repeat="item in cart.items">
+							<div class="d-flex flex-row">
+								<img class="rounded" ng-src="http://localhost:8080/rest/files/files/{{item.image}}" width="40">
+								<div class="ml-2"><span class="font-weight-bold d-block">{{item.coursename}}</span>
+
+								</div>
+							</div>
+							<div class="d-flex flex-row align-items-center">
+
+								<span class="d-block ml-5 font-weight-bold">{{item.price | number }}</span>
+
+								<i ng-click="cart.remove(item.id)" class="fa fa-trash-o ml-3 text-black-50"></i>
+
+							</div>
+						</div>
+						<div class="d-flex flex-row align-items-center" >
+							<a th:href="@{/courses}" >
+								<i class="fa fa-long-arrow-left"></i>
+								<span class="ml-2" >Continue Shopping</span>
+							</a>
+
+							<div ng-if="cart.items.length" class="class= ml-auto p-2 bd-highlight panel-footer">
+								<button ng-click="cart.clear()" class="btn btn-danger">
+									<i class="glyphicon glyphicon-trash"></i> Clear
+								</button>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="payment-info">
+
+					<hr class="line">
+					<div class="d-flex justify-content-between information"><span>Tổng khoá học</span><span>{{cart.count}} </span></div>
+					<div class="d-flex justify-content-between information"><span>Số tiền</span><span>{{cart.amount | number}} VNĐ</span></div>
+					<div ng-if="cart.items.length" th:if="${message == 'Vourcher hợp lệ'}" class="d-flex justify-content-between information"><span>Áp dụng Voucher</span><span th:if="${giam}!=0" th:text="${#numbers.formatDecimal(giam, 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"> </span>
+						<span th:if="${giam}==0" th:text="${percent} + '%'"> </span></div>
+					<div th:if="${message == 'Vourcher hợp lệ'}" class="d-flex justify-content-between information"><span>Tổng tiền</span><span >{{cart.addVoucher() | number}} VNĐ </span></div>
+
+					<div>
+						<div class="container mt-5" ng-if="cart.items.length">
+							<div class="form-group">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="showList" onchange="toggleList()">
+									<label class="form-check-label" for="showList">
+										Nhập mã voucher
+									</label>
+									<p th:text="${message}"></p>
+								</div>
+							</div>
+							<div id="listItems" style="display: none" >
+								<form action="/cart/checkVourcher" method="POST" class="form-inline" >
+									<input type="text" name="voucherCode" class="form-control" ng-if="cart.items.length">
+									<button type="submit" class="btn btn-primary">Áp dụng</button>
+
+								</form>
+
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<button ng-if="cart.items.length" class="btn btn-primary btn-block d-flex justify-content-between mt-3" type="button" ng-click="order.purchase(cart.addVoucher(),idVoucher)" >
+					<!--							<span>{{cart.amount | number : 2}}$</span>-->
+					<span>Tiếp tục thanh toán<i class="fa fa-long-arrow-right ml-1"></i></span>
+				</button>
+			</div>
+
+		</div>
+	</div>
+	<div class="newsletter">
+		<div class="newsletter_background parallax-window"
+			 data-parallax="scroll" data-image-src="images/newsletter.jpg"
+			 data-speed="0.8"></div>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<div
+							class="newsletter_container d-flex flex-lg-row flex-column align-items-center justify-content-start">
+
+						<div class="newsletter_content text-lg-left text-center">
+							<div class="newsletter_title">sign up for news and offers</div>
+							<div class="newsletter_subtitle">Subcribe to lastest
+								smartphones news & great deals we offer</div>
+						</div>
+
+						<div class="newsletter_form_container ml-lg-auto">
+							<form action="#" id="newsletter_form"
+								  class="newsletter_form d-flex flex-row align-items-center justify-content-center">
+								<input type="email" class="newsletter_input"
+									   placeholder="Your Email" required="required">
+								<button type="submit" class="newsletter_button"></button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:replace="layout_user/layout :: footer"></div>
+<!--/////////////////////////////////  -->
+<div th:replace="layout_user/layout :: jquery"></div>
+</body>
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/courses.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:27 GMT -->
+</html>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	let voucher = /*[[${giam}]]*/ 0;
+	let percent = /*[[${percent}]]*/ 0;
+	let idVoucher = /*[[${idVoucher}]]*/ 0;
+	console.log(idVoucher);
+	/*]]>*/
+</script>
+<script src="/script/course_js.js"></script>
+<script th:src="@{/script/shopping-cart-ctrl.js}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+	function toggleList() {
+		var list = document.getElementById("listItems");
+
+		if (document.getElementById("showList").checked) {
+			list.style.display = "block";
+		} else {
+			list.style.display = "none";
+		}
+	}
+
+	function handleCheck(currentCheckbox) {
+		var checkboxes = document.getElementsByName("items");
+		checkboxes.forEach(function(checkbox) {
+			if (checkbox !== currentCheckbox) {
+				checkbox.checked = false;
+			}
+		});
+	}
+</script>
+
+

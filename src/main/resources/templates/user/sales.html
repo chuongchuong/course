@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/courses.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:06:19 GMT -->
+<head th:replace="layout_user/layout :: head"></head>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="/user/styles/courses.css">
+	<link rel="stylesheet" type="text/css" href="/user/styles/courses_responsive.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+
+
+</head>
+<body>
+<div class="courses_container">
+<div   class="row courses_row" th:fragment="sales_courses">
+<div class="col-lg-6 course_col"  th:each="item, stat  : ${courses}" >
+	<div th:if="${changePrices[stat.index]} != null"><input type="hidden" class="sale-end-date"  th:value="${saleEndDates[stat.index]}">
+		<h5 class="time-remaining">Time remaining here</h5></div>
+
+
+	<div class="course">
+		<div class="course_image">
+			<img th:src="@{'http://localhost:8080/rest/files/files/'+${item.course.image}}" alt="Image Description">
+		</div>
+		<div class="course_body">
+			<h3 class="course_title">
+				<a th:href="@{/detail_course/{id}(id=${item.course.id})}" th:text="${item.course.coursename}"></a>
+			</h3>
+			<div class="course_teacher" th:text="${item.course.created_by.username}"></div>
+			<div class="course_text">
+				<p th:text="${item.course.category.categoryname}"></p>
+			</div>
+		</div>
+		<div class="course_footer">
+			<div class="course_footer_content d-flex flex-row align-items-center justify-content-start">
+				<span><a class="btn btn-warning" href="#" th:attr="ng-click=@{|cart.add(${item.course.id})|}" onclick="preventDefault(event)">Add to cart</a></span>
+
+				<div class="ml-auto">
+				<div th:if="${changePrices[stat.index]} == null" class="course_price ml-auto" th:text="${item.course.price}"></div>
+				<div th:if="${changePrices[stat.index]} != null">
+					<div class="course_price" th:text="${#numbers.formatDecimal(changePrices[stat.index], 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"></div>
+					<del><div class="change_price" th:text="${#numbers.formatDecimal(item.course.price, 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"></div></del>
+
+				</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	</div>
+</div>
+</div>
+</body>
+<script>
+	function preventDefault(event) {
+		event.preventDefault();
+	}
+</script>

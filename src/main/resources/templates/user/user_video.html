@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/course.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:05:34 GMT -->
+<head th:replace="layout_user/layout :: head"></head>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <script src="/script/user/video_detail.js"></script>
+    <link rel="stylesheet" type="text/css" href="/user/styles/course.css">
+    <link rel="stylesheet" type="text/css" href="/user/styles/course_responsive.css">
+    <link rel="stylesheet" type="text/css" href="/user/styles/courses.css">
+
+    <style>
+        #supportInput {
+  width: 250px; /* Điều chỉnh kích thước chiều rộng của thẻ input theo ý muốn */
+  padding: 10px; /* Tùy chỉnh lề và padding */
+  border: 1px solid #ccc; /* Tùy chỉnh đường viền */
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+        label.radio {
+            cursor: pointer;
+        }
+
+        label.radio input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        label.radio span {
+            padding: 4px 8px;
+
+            border: 1px solid red;
+            display: inline-block;
+            color: red;
+            min-width: 100px;
+            text-align: center;
+            border-radius: 3px;
+            margin-top: 7px;
+            text-transform: uppercase;
+
+        }
+
+        label.radio input:checked + span {
+            border-color: red;
+            background-color: red;
+            color: #fff;
+        }
+
+        .ans {
+            margin-left: 36px !important;
+        }
+
+        .btn:focus {
+            outline: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .btn:active {
+            outline: 0 !important;
+            box-shadow: none !important;
+        }
+    </style>
+
+
+</head>
+<body ng-app="myApp" ng-controller="User-ctrl">
+<input type="hidden" th:value="${quiz_id}" id="quiz_id">
+<div class="super_container">
+
+    <header th:replace="layout_user/layout :: header"></header>
+
+    <div class="menu d-flex flex-column align-items-end justify-content-start text-right menu_mm trans_400">
+        <div class="menu_close_container"><div class="menu_close"><div></div><div></div></div></div>
+
+
+    </div>
+
+    <div class="home">
+        <div class="breadcrumbs_container">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="breadcrumbs">
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="courses.html">Courses</a></li>
+                                <li>Course Details</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="course">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-8">
+                    <div class="course_container">
+                        <div class="course_title"  th:text="${course.coursename}"></div>
+
+
+                        <div class="course_info d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+
+                            <div class="course_info_item">
+                                <div class="course_info_title">Teacher:</div>
+                                <div class="course_info_text"><a href="#" th:text="${course.created_by.username}"></a></div>
+                            </div>
+
+
+                            <div class="course_info_item">
+                                <div class="course_info_title">Categories:</div>
+                                <div class="course_info_text"><a href="#" th:text="${course.category.categoryname}"></a></div>
+                            </div>
+                        </div>
+
+                        <div class="course_image"><img th:src="@{'http://localhost:8080/rest/files/files/'+${course.image}}" alt="Image Description"></div>
+
+                        <div class="course_tabs_container" >
+                            <div class="tabs d-flex flex-row align-items-center justify-content-start">
+                                <div class="tab ">description</div>
+                            </div>
+                            <div class="tab_panels">
+
+                                <div class="tab_panel active">
+                                    <div class="tab_panel_title" th:text="${course.coursename}"></div>
+                                    <div class="tab_panel_content">
+                                        <div class="tab_panel_text">
+                                            <p th:text="${course.descriptions}"></p>
+                                        </div>
+                                        <div class="tab_panel_faq" th:if="${error == null}">
+                                            <div class="tab_panel_title">Bài  {{currentChapter}} : {{currentName}} </div>
+                                            <div >
+                                                <iframe width="700" height="400" ng-show="youtube" ng-src="{{trustedVideoUrl}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                                <button ng-show="btnYou" ng-click="findAll1(currentId)" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                                   Làm quiz
+                                                </button>
+                                                <button ng-if="tong" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                                    Kết quả
+                                                </button>
+                                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Kết quả Quiz</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form>
+                                                                    <h2>Thông tin kết quả</h2>
+                                                                    <p>Tổng câu hỏi: {{ tong }}</p>
+                                                                    <p>Số câu đúng: {{dung}}</p>
+                                                                    <p>Số câu sai: {{ sai }}</p>
+                                                                    <p>Phần trăm đúng: {{ ((dung / tong) * 100).toFixed(2) }}%</p>
+                                                                </form>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLongTitle">Làm quiz</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body" >
+                                                                <div class="container mt-1" ng-show="showQuizForm">
+                                                                    <form>
+
+
+                                                                            <div class="d-flex justify-content-center row">
+                                                                                <div class="col-md-10 col-lg-10">
+                                                                                    <div class="border">
+                                                                                        <div class="question bg-white p-3 border-bottom">
+                                                                                            <div class="d-flex flex-row justify-content-between align-items-center mcq">
+
+                                                                                            <h3>Tổng : {{currentQuestionIndex }} / {{ data.length }}</h3>
+
+                                                                                        </div>
+                                                                                        <div class="question bg-white p-3 border-bottom">
+                                                                                            <div class="d-flex flex-row align-items-center question-title">
+                                                                                                <h3 class="text-danger">Q.</h3>
+                                                                                                <h5 class="mt-1 ml-2">{{ cauhoi.question }}</h5>
+                                                                                            </div>
+                                                                                            <div class="ans ml-5">
+                                                                                            <label class="radio"> <input ng-click="addToArray('a')"  type="radio" class="form-check-input options" id="option1" name="answer" value="a" ng-model="selectedAnswer_a"> <span>{{ cauhoi.answer_a }}</span>
+                                                                                            </label>
+                                                                                        </div><div class="ans ml-5">
+                                                                                            <label class="radio"> <input ng-click="addToArray('b')"  type="radio" class="form-check-input options" id="option2" name="answer" value="b" ng-model="selectedAnswer_b">
+                                                                                                <span>{{ cauhoi.answer_b }}</span>
+                                                                                            </label>
+                                                                                        </div><div class="ans ml-5">
+                                                                                            <label class="radio"> <input ng-click="addToArray('c')"  type="radio" class="form-check-input options" id="option3" name="answer" value="c" ng-model="selectedAnswer_c">
+                                                                                                <span>{{ cauhoi.answer_c }}</span>
+                                                                                            </label>
+                                                                                        </div><div class="ans ml-5">
+                                                                                            <label class="radio"> <input ng-click="addToArray('d')"  type="radio" class="form-check-input options" id="option4" name="answer" value="d" ng-model="selectedAnswer_d">
+                                                                                                <span >{{ cauhoi.answer_d }}</span>
+                                                                                            </label>
+                                                                                        </div></div>
+                                                                                        <div class="d-flex flex-row justify-content-between align-items-center p-3 bg-white">
+                                                                                            <button class="btn btn-primary d-flex align-items-center btn-danger" type="button" ng-click="back()" ng-show="btnshowback"><i class="fa fa-angle-left mt-1 mr-1"></i>&nbsp;previous</button>
+                                                                                            <button class="btn btn-primary border-success align-items-center btn-success" type="button" ng-click="nextQuestion()" ng-show="btnshownext">Next<i class="fa fa-angle-right ml-2"></i></button>
+                                                                                            <button class="btn btn-primary border-success align-items-center btn-success" type="button" ng-click="submitQuiz(currentId)" ng-show="btnshowsubmit">Submit</button>
+</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            </div>
+                                                                    </form>
+
+                                                                </div>
+
+                                                                <div ng-show="messageThongBao">
+                                                                    <p>Video không có quizz</p>
+                                                                </div>
+                                                                <div ng-show="showResultForm">
+                                                                    <!-- Form hiển thị thông tin -->
+                                                                    <form>
+                                                                        <h2>Thông tin kết quả</h2>
+                                                                        <p>Tổng câu hỏi: {{ data.length }}</p>
+                                                                        <p>Số câu đúng: {{scores}}</p>
+                                                                        <p>Số câu sai: {{ data.length - scores }}</p>
+                                                                        <p>Phần trăm đúng: {{ ((scores / data.length) * 100).toFixed(2) }}%</p>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div th:unless="${error == null}">
+                                                <!-- Content to display when error is not null -->
+                                                <p>Bạn chưa sở hữu khóa học</p> <!-- Replace this with appropriate error message -->
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div th:replace="layout_user/layout :: comment"> </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="sidebar">
+
+                        <div class="sidebar_section">
+                            <div class="sidebar_section_title">Chi tiết khóa học</div>
+                            <div class="sidebar_feature">
+
+                                <div class="sidebar_feature">
+
+
+                                    <div class="feature_list">
+
+
+
+
+
+                                        <div class="feature d-flex flex-row align-items-center justify-content-start">
+                                            <div class="feature_title"><i class="fa fa-question-circle-o" aria-hidden="true"></i><span>VIDEO:</span></div>
+                                            <div class="feature_text ml-auto">{{videoCount}}</div>
+                                        </div>
+
+                                        <div class="feature d-flex flex-row align-items-center justify-content-start">
+                                            <div class="feature_title"><i class="fa fa-list-alt" aria-hidden="true"></i><span>QUIZ:</span></div>
+                                            <div class="feature_text ml-auto">CÓ</div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sidebar_section">
+                                <div class="sidebar_section_title">Giảng viên</div>
+                                <div class="sidebar_teacher">
+                                    <div class="teacher_title_container d-flex flex-row align-items-center justify-content-start">
+<!--                                        <div class="teacher_image"><img th:src="@{/images/user/__${course.image}__}" alt="Image Description"></div>-->
+                                        <div class="teacher_title">
+                                            <div class="teacher_name"><a href="#" th:text="${course.created_by.username}"></a></div>
+                                        </div>
+                                    <hr>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary mb-2" id="openFormButton">Hỗ trợ</button>
+                                <div id="supportForm" style="display: none;">
+                                    <h3>Thông tin cần hỗ trợ</h3>
+                                    <form th:action="@{/library/support/{courseId}/{createdByEmail}(courseId=${course.id}, createdByEmail=${course.created_by.email})}" method="post">
+
+                                    <div class="form-group">
+                                            <textarea rows="4" required="required" name="noiDung" type="text" class="form-control" placeholder="Nhập nội dung cần hỗ trợ"></textarea>
+                                    </div>
+                                        <button type="submit" class="btn btn-primary mb-2">Xác nhận</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <div class="sidebar_section" >
+                                <div  ng-repeat="video in videos"  style="margin-bottom: 10px;">
+                                    <button   type="button" class="btn btn-primary" style="width: 500px;text-align: left"   ng-click="changeVideo(video.url, video.chapter, video.name,video.id,$index)" ng-bind="'Bài ' + video.chapter + ': ' + video.name"></button>
+                                </div>
+                            </div>
+
+                            <div th:if="${not #strings.isEmpty(successMessage)}" class="alert alert-success">
+                                <p th:text="${successMessage}"></p>
+                            </div>
+                            <script>
+                                // Lấy tham chiếu đến các phần tử
+                                const openFormButton = document.getElementById("openFormButton");
+                                const supportForm = document.getElementById("supportForm");
+                                const confirmButton = document.getElementById("confirmButton");
+                                const successMessage = document.getElementById("successMessage");
+
+                                // Xử lý sự kiện khi nút "Hỗ trợ" được nhấp
+                                openFormButton.addEventListener("click", function () {
+                                  // Hiển thị biểu mẫu
+                                  supportForm.style.display = "block";
+                                });
+
+                                // Xử lý sự kiện khi nút "Xác nhận" được nhấp
+                                confirmButton.addEventListener("click", function (event) {
+                                  event.preventDefault(); // Ngăn chặn sự kiện mặc định của nút "Xác nhận"
+                                  // Tắt biểu mẫu và hiển thị thông báo thành công
+                                  supportForm.style.display = "none";
+                                  successMessage.style.display = "block";
+                                });
+                            </script>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<div th:replace="layout_user/layout :: footer">
+</div>
+<!--/////////////////////////////////  -->
+<div th:replace="layout_user/layout :: jquery">
+
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let courseId = /*[(${course.id})]*/ null;
+
+    /*]]>*/
+</script>
+</body>
+
+
+</html>
+
+

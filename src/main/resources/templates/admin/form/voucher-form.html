@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description">
+    <meta content="Coderthemes" name="author">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="\assets\images\favicon.ico">
+    <!-- Plugin css -->
+    <link href="\assets\libs\bootstrap-tagsinput\bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="\assets\libs\switchery\switchery.min.css" rel="stylesheet" type="text/css">
+    <link href="\assets\libs\select2\select2.min.css" rel="stylesheet" type="text/css">
+    <link href="\assets\libs\clockpicker\bootstrap-clockpicker.min.css" rel="stylesheet">
+    <link href="\assets\libs\bootstrap-timepicker\bootstrap-timepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="\assets\libs\bootstrap-colorpicker\bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css">
+    <link href="\assets\libs\bootstrap-datepicker\bootstrap-datepicker.css" rel="stylesheet">
+    <link href="\assets\libs\bootstrap-daterangepicker\daterangepicker.css" rel="stylesheet">
+    <!-- Summernote css -->
+    <link href="assets\libs\summernote\summernote-bs4.css" rel="stylesheet" type="text/css">
+    <!-- App css -->
+    <link href="\assets\css\bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet">
+    <link href="\assets\css\icons.min.css" rel="stylesheet" type="text/css">
+    <link href="\assets\css\app.min.css" rel="stylesheet" type="text/css" id="app-stylesheet">
+    <style>
+        /* Style cho tab */
+        .tab button {
+            background-color: #f2f2f2;
+            border: 1px solid #ccc;
+            outline: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        /* Style cho tab content */
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .tabcontent h3 {
+            margin-top: 0;
+        }
+
+    </style>
+</head>
+<body>
+<div id="wrapper">
+
+    <div th:replace="admin/layout/adminFragments :: topbar"></div>
+    <!-- end Topbar --> <!-- ========== Left Sidebar Start ========== -->
+    <div th:replace="admin/layout/adminFragments :: slidebar"></div>
+    <div class="content-page">
+        <div class="content">
+
+            <!-- Start container-fluid -->
+            <div class="container-fluid">
+
+                <!-- start  -->
+                <div class="row">
+                    <div class="col-12">
+                        <div>
+                            <h4 class="header-title mb-3"Voucher</h4>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+                <h6><div class="tab-container">
+                    <div class="tab">
+                        <button class="tablinks" onclick="openTab(event, 'tab1')">Voucher</button>
+                        <button class="tablinks" onclick="openTab(event, 'tab2')">Đã SD</button>
+                        <button class="tablinks" onclick="openTab(event, 'tab3')">Thêm voucher</button>
+                    </div>
+
+                    <div id="tab1" class="tabcontent">
+                        <h3>Voucher</h3>
+                        <table class="table table-striped table-bordered dt-responsive nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Voucher Code</th>
+                                <th>Created By</th>
+                                <th>Percent</th>
+                                <th>Price</th>
+                                <th>Description</th>
+                                <th>Created Date</th>
+                                <th>End Date</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="voucher : ${vouchers}">
+                                <td th:text="${voucher.id}"></td>
+                                <td th:text="${voucher.voucherCode}"></td>
+                                <td th:text="${voucher.user.username}"></td> <!-- Thay user.id bằng thuộc tính phù hợp -->
+                                <td th:text="${voucher.percent}"></td>
+                                <td th:text="${voucher.price}"></td>
+                                <td th:text="${voucher.description}"></td>
+                                <td th:text="${voucher.createdDate}"></td>
+                                <td th:text="${voucher.endDate}"></td>
+                                <td><button class="btn btn-primary" onclick="fillForm(this)">Edit</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="tab2" class="tabcontent">
+                        <h3>Voucher đã sử dụng</h3>
+                        <table class="table table-striped table-bordered dt-responsive nowrap">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Voucher ID</th>
+                                <th>User ID</th>
+                                <th>Create Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="usedVoucher : ${usedVouchers}">
+                                <td th:text="${usedVoucher.id}"></td>
+                                <td th:text="${usedVoucher.voucher.id}"></td>
+                                <td th:text="${usedVoucher.user.id}"></td>
+                                <td th:text="${usedVoucher.createDate}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="tab3" class="tabcontent form-group">
+                        <h3>Voucher Management</h3>
+                        <form method="post" th:object="${voucher}" class="was-validated">
+                            <div  class="form-group">
+                                <label for="inputType">Chọn loại voucher</label>
+                                <select id="inputType" onchange="toggleInput()" class="form-control custom-select" required>
+                                    <option value="">Chọn cách thức giảm</option>
+                                    <option value="text">Giảm giá theo %</option>
+                                    <option value="number">Giảm giá cố định</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Hãy chọn cách giảm bạn muốn
+                                </div>
+                            </div>
+                            <div  class="form-group">
+                                <input class="form-control" type="hidden" th:field="*{id}" />
+                            </div>
+                            <div class="form-group" id="percenttab"  style="display: block;">
+                                <label for="percent">Percent:(%)</label>
+                                <input class="form-control" id="percent" type="number" th:field="*{percent}" value="0" required min="0" max="99"/>
+                                <div class="invalid-feedback">
+                                    Hãy nhập tí giá hợp lí
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="pricetab"  style="display: none;" >
+                                <label for="price">Price:($)</label>
+                                <input class="form-control" id="price" type="number" th:field="*{price}" value="0" required min="0"/>
+                                <div class="invalid-feedback">
+                                    Hãy nhập giá cần giảm
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description:</label>
+                                <input class="form-control" id="description" type="text" th:field="*{description}" required />
+                                <div class="invalid-feedback">
+                                    Hãy nhập mô tả của voucher
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="endDate">End Date:</label>
+                                <input class="form-control" id="endDate" type="date" th:field="*{endDate}" required />
+                                <div class="invalid-feedback">
+                                    vui lòng chọn ngày kết thúc
+                                </div>
+                            </div>
+
+                            <!-- Nút thực hiện hành động -->
+                            <button class="btn btn-primary" type="submit" name="action" value="add"  th:attr = "formaction = '/admin/voucher/addVoucher'">Add</button>
+                            <button class="btn btn-primary" type="submit" name="action" value="update"  th:attr = "formaction = '/admin/voucher/updateVoucher'">Update</button>
+                            <button class="btn btn-primary" type="submit" name="action" value="delete"  th:attr = "formaction = '/admin/voucher/deleteVoucher'"style="display: none">Delete</button>
+                        </form>
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                    <!-- end row -->
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!-- Vendor js -->
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+
+        // Ẩn tất cả các tab content
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Loại bỏ lớp active từ tất cả các tablinks
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+        }
+
+        // Hiển thị tab content được chọn và đánh dấu là active
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.classList.add("active");
+    }
+
+    // Mặc định hiển thị tab đầu tiên khi trang được tải
+    document.getElementById("tab1").style.display = "block";
+    document.getElementsByClassName("tablinks")[0].classList.add("active");
+
+
+    function fillForm(button) {
+        var row = button.parentNode.parentNode; // Lấy hàng chứa nút được nhấn
+        var cells = row.getElementsByTagName("td"); // Lấy tất cả các ô trong hàng đó
+
+        var idVoucher = cells[0].innerText; // Lấy dữ liệu từ ô id
+        var vouchercode = cells[1].innerText; // Lấy dữ liệu từ ô vouchercode
+        var userid = cells[2].innerText; // Lấy dữ liệu từ ô userid
+        var percent = cells[3].innerText; // Lấy dữ liệu từ ô percent
+        var price = cells[4].innerText; // Lấy dữ liệu từ ô price
+        var description = cells[5].innerText; // Lấy dữ liệu từ ô description
+        var endDate = cells[6].innerText;
+
+
+        var formElements = document.getElementsByClassName("form-control");
+        formElements[1].value = idVoucher;
+        formElements[2].value = percent;
+        formElements[3].value = price;
+        formElements[4].value = description;
+        formElements[5].value = endDate;
+
+        openTab(event, 'tab3');
+    }
+    function toggleInput() {
+        var selectedInput = document.getElementById("inputType").value;
+
+        if (selectedInput === "text") {
+            document.getElementById("percenttab").style.display = "block";
+            document.getElementById("pricetab").style.display = "none";
+            document.getElementById("price").value = 0;
+        } else if (selectedInput === "number") {
+            document.getElementById("percenttab").style.display = "none";
+            document.getElementById("pricetab").style.display = "block";
+            document.getElementById("percent").value = 0;
+        }
+    }
+
+
+
+
+</script>
+<script src="\assets\js\vendor.min.js"></script>
+<script src="\assets\libs\moment\moment.min.js"></script>
+<script src="\assets\libs\bootstrap-tagsinput\bootstrap-tagsinput.min.js"></script>
+<script src="\assets\libs\switchery\switchery.min.js"></script>
+<script src="\assets\libs\select2\select2.min.js"></script>
+<script src="\assets\libs\parsleyjs\parsley.min.js"></script>
+<script src="\assets\libs\bootstrap-filestyle2\bootstrap-filestyle.min.js"></script>
+<script src="\assets\libs\bootstrap-timepicker\bootstrap-timepicker.min.js"></script>
+<script src="\assets\libs\bootstrap-colorpicker\bootstrap-colorpicker.min.js"></script>
+<script src="\assets\libs\clockpicker\bootstrap-clockpicker.min.js"></script>
+<script src="\assets\libs\bootstrap-datepicker\bootstrap-datepicker.min.js"></script>
+<script src="\assets\libs\bootstrap-daterangepicker\daterangepicker.js"></script>
+<!-- Summernote js -->
+<script src="\assets\libs\summernote\summernote-bs4.min.js"></script>
+
+<!-- Init js-->
+<script src="\assets\js\pages\form-advanced.init.js"></script>
+
+<!-- App js -->
+<script src="\assets\js\app.min.js"></script>
+
+
+
+</body>
+</html>

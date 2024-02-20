@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Responsive bootstrap 4 admin template" name="description">
+    <meta content="Coderthemes" name="author">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <!-- Plugin css -->
+    <link href="/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="/assets/libs/switchery/switchery.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/libs/clockpicker/bootstrap-clockpicker.min.css" rel="stylesheet">
+    <link href="/assets/libs/bootstrap-timepicker/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/libs/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="/assets/libs/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!-- Summernote css -->
+    <link href="assets/libs/summernote/summernote-bs4.css" rel="stylesheet" type="text/css">
+    <!-- App css -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bootstrap-stylesheet">
+    <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body  ng-app="myApp" ng-controller="myCtrl2">
+<div id="wrapper">
+
+    <div th:replace="admin/layout/adminFragments :: topbar"></div>
+    <!-- end Topbar --> <!-- ========== Left Sidebar Start ========== -->
+    <div th:replace="admin/layout/adminFragments :: slidebar"></div>
+    <div class="content-page">
+        <div class="content">
+
+            <!-- Start container-fluid -->
+            <div class="container-fluid">
+
+                <!-- start  -->
+                <div class="row">
+                    <div class="col-12">
+                        <div>
+                            <h4 class="header-title mb-3">Courses Form</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row -->
+                <form th:action="@{'/admin/course/detail/create/'+${course_id}}" th:object="${coursedetails}" id="detail_form" method="POST" >
+                    <input type="hidden" name="id" th:field="*{id}">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" th:field="*{name}">
+                        <p class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="chapter">Chapter:</label>
+                        <input type="number" class="form-control" id="chapter" name="chapter" th:field="*{chapter}">
+                        <p class="error-message" th:if="${#fields.hasErrors('chapter')}" th:errors="*{chapter}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="url">URL:</label>
+                        <input type="text" class="form-control" id="url" name="url" th:field="*{url}">
+                        <p class="error-message" th:if="${#fields.hasErrors('url')}" th:errors="*{url}"></p>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="createVideoBtn">TAO VIDEO</button>
+                    <button type="submit" class="btn btn-primary" id="updateBtn" disabled>Update</button>
+
+
+                </form>
+
+                <!-- end -->
+
+
+
+            </div>
+            <!-- end row -->
+            <div id="courseid" th:text="${course_id}" style="display: none"></div>
+            <div class="container-fluid">
+                <div class="mt-5">
+                    <p class="sub-header">
+                        Bảng thông tin liên quan đến các khóa học
+                    </p>
+                    <div class="table-container">
+                        <button onclick="sortTable()" class="btn btn-primary" >Sắp xếp từ thấp đến cao</button>
+                        <table id="datatable-buttons" class="table table-bordered" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                            <tr>
+                                <th>Tên bài học </th>
+                                <th>Chương</th>
+                                <th>Đường dẫn</th>
+
+                                <th>Ngày tạo</th>
+                                <th>Cập nhật</th>
+
+                            </tr>
+                            </thead>
+
+                            <tbody >
+                            <tr th:each="coursedetail : ${coursedetail}">
+                                <td th:id="${coursedetail.name}" th:text="${coursedetail.name}"> {{x.name}}</td>
+                                <td th:id="${coursedetail.chapter}" th:text="${coursedetail.chapter}"> {{x.chapter}}</td>
+                                <td th:id="${coursedetail.url}" th:text="${coursedetail.url}"> {{x.url}}</td>
+
+                                <td th:text="${coursedetail.createddate}"> {{x.createddate | date:'mm-dd-yyyy'}}</td>
+                                <td th:text="${coursedetail.updatedate}"> {{x.updatedate}}</td>
+                                <td > <button id="edit" class="btn btn-primary"  th:attr="onclick=|edit('${coursedetail.id}','${coursedetail.name}','${coursedetail.chapter}','${coursedetail.url}')|">Edit</button>
+
+                                </td>
+                                <td>
+                                    <a th:href="@{'/admin/course/detail/delete/' + ${coursedetail.id}}" class="btn btn-danger">Delete</a>
+
+                                </td>
+                                <td>
+                                    <a type="button" th:href="@{'/admin/quiz/' +${coursedetail.id}}" class="btn btn-primary" id="quizBtn" >Create Quiz</a>
+
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Vendor js -->
+<script src="/assets/js/vendor.min.js"></script>
+<script src="/assets/libs/moment/moment.min.js"></script>
+<script src="/assets/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+<script src="/assets/libs/switchery/switchery.min.js"></script>
+<script src="/assets/libs/select2/select2.min.js"></script>
+<script src="/assets/libs/parsleyjs/parsley.min.js"></script>
+<script src="/assets/libs/bootstrap-filestyle2/bootstrap-filestyle.min.js"></script>
+<script src="/assets/libs/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="/assets/libs/bootstrap-colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="/assets/libs/clockpicker/bootstrap-clockpicker.min.js"></script>
+<script src="/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+<script src="/assets/libs/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Summernote js -->
+<script src="/assets/libs/summernote/summernote-bs4.min.js"></script>
+
+<!-- Init js-->
+<script src="/assets/js/pages/form-advanced.init.js"></script>
+
+<!-- App js -->
+<script src="/assets/js/app.min.js"></script>
+<script src="/script/admin/course-detail-js.js"></script>
+
+
+
+</body>
+<script th:inline="javascript">
+    function edit(id,name,chapter,url){
+        var form = document.getElementById('detail_form');
+        form.setAttribute('action', '/admin/course/detail/update/' + id);
+
+
+        document.getElementById("name").value = name;
+        document.getElementById("chapter").value = chapter;
+        document.getElementById("url").value = url;
+        document.getElementById('createVideoBtn').disabled = true;
+        document.getElementById('updateBtn').disabled = false;
+    }
+
+    function sortTable() {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("datatable-buttons");
+        switching = true;
+
+        while (switching) {
+            switching = false;
+            rows = table.getElementsByTagName("tr");
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[1]; // Cột Age
+                y = rows[i + 1].getElementsByTagName("td")[1]; // Cột Age tiếp theo
+
+                if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
+</script>
+
+</html>
+
+

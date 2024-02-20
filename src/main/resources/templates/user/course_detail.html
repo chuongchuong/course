@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<!-- Mirrored from preview.colorlib.com/theme/unicat/course.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:05:34 GMT -->
+<head th:replace="layout_user/layout :: head"></head>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <script src="/script/user/video_detail.js"></script>
+    <link rel="stylesheet" type="text/css" href="/user/styles/course.css">
+    <link rel="stylesheet" type="text/css" href="/user/styles/course_responsive.css">
+</head>
+<body ng-app="myApp" ng-controller="User-ctrl">
+<div class="super_container"  >
+
+    <header th:replace="layout_user/layout :: header"></header>
+
+
+
+</div>
+
+<div class="home" >
+    <div class="breadcrumbs_container">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="breadcrumbs">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="courses.html">Courses</a></li>
+                            <li>Course Details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="course">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-8">
+                <div class="course_container">
+                    <div class="course_title" th:text="${course.coursename}"></div>
+                    <div class="course_info d-flex flex-lg-row flex-column align-items-lg-center align-items-start justify-content-start">
+
+                        <div class="course_info_item">
+                            <div class="course_info_title">Teacher:</div>
+                            <div class="course_info_text"><a href="#" th:text="${course.created_by.username}"></a></div>
+                        </div>
+
+
+                        <div class="course_info_item">
+                            <div class="course_info_title">Categories:</div>
+                            <div class="course_info_text"><a href="#" th:text="${course.category.categoryname}"></a></div>
+                        </div>
+                    </div>
+
+                    <div class="course_image">
+                        <img th:src="@{'http://localhost:8080/rest/files/files/'+${course.image}}" alt="Image Description">
+                    </div>
+
+                    <div class="course_tabs_container">
+                        <div class="tabs d-flex flex-row align-items-center justify-content-start">
+                            <div class="tab ">description</div>
+                        </div>
+                        <div class="tab_panels">
+
+                            <div class="tab_panel active">
+                                <div class="tab_panel_title" th:text="${course.coursename}"></div>
+                                <div class="tab_panel_content">
+                                    <div class="tab_panel_text">
+                                        <p th:text="${course.descriptions}"></p>
+                                    </div>
+
+                                    <div class="tab_panel_faq" th:if="${videos != null}">
+                                        <div class="tab_panel_title" th:each="video, iterStat : ${videos}" th:if="${iterStat.index == 0}" th:text="'Bài '+ ${video.chapter} + ' : ' +${video.name} ">Review</div>
+                                        <div th:if="${videos != null}">
+
+                                            <ul>
+                                                <li th:each="video, iterStat : ${videos}" th:if="${iterStat.index == 0}">
+                                                    <iframe width="560" height="315" th:src="@{'https://www.youtube.com/embed/' + ${video.url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+                                                </li>
+
+
+                                            </ul>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div  th:replace="layout_user/layout :: comment"> </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4" ng-controller="cart-ctrl">
+                <div class="sidebar">
+
+                    <div class="sidebar_section">
+                        <div class="sidebar_section_title">Chi tiết khóa học</div>
+                        <div class="sidebar_feature">
+                            <div class="course_price" ><span><a class="btn btn-warning" href="#" th:attr="ng-click=@{|cart.add(${course.id})|}" onclick="preventDefault(event)">Add to cart</a></span>
+                            </div>
+                            <div class="sidebar_feature">
+                                <div th:if="${changePrices} == null">
+                                    <div class="course_price" th:text="${#numbers.formatDecimal(course.price, 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"></div>
+                                </div>
+                                <div th:if="${changePrices} != null">
+                                    <input type="hidden" class="sale-end-date" th:value="${saleEndDates[0]}">
+                                    <h5 class="time-remaining">Thời gian còn lại ở đây</h5>
+                                    <h3 th:utext="'<del>' + ${#numbers.formatDecimal(course.price, 0, 'COMMA', 0, 'POINT') } + 'VNĐ'+ '</del> - ' + ${salePercents[0]} + '%'"></h3>
+                                    <div class="course_price ml-auto" th:text="${#numbers.formatDecimal(changePrices, 0, 'COMMA', 0, 'POINT') } + 'VNĐ'"></div>
+                                </div>
+                            </div>
+                            <div class="feature_list">
+
+
+
+
+
+                                <div class="feature d-flex flex-row align-items-center justify-content-start">
+                                    <div class="feature_title"><i class="fa fa-question-circle-o" aria-hidden="true"></i><span>VIDEO:</span></div>
+                                    <div class="feature_text ml-auto">{{videoCount}}</div>
+                                </div>
+
+                                <div class="feature d-flex flex-row align-items-center justify-content-start">
+                                    <div class="feature_title"><i class="fa fa-list-alt" aria-hidden="true"></i><span>QUIZ:</span></div>
+                                    <div class="feature_text ml-auto">CÓ</div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar_section">
+                        <div class="sidebar_section_title">Giảng viên</div>
+                        <div class="sidebar_teacher">
+                            <div class="teacher_title_container d-flex flex-row align-items-center justify-content-start">
+<!--                                <div class="teacher_image"><img th:src="@{/images/user/__${course.image}__}" alt="Image Description"></div>-->
+                                <div class="teacher_title">
+                                    <div class="teacher_name"><a href="#" th:text="${course.created_by.username}"></a></div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="sidebar_section" >
+                        <div th:if="${videos != null}" th:each="video, iterStat : ${videos}" style="margin-bottom: 10px;">
+                        <button   type="button" class="btn btn-secondary" style="width: 500px;text-align: left; color: black" disabled th:text="'Bài '+${video.chapter}+ ': ' + ${video.name}"></button>
+                        </div>
+                    </div>
+
+                    <!--                        <div class="sidebar_section">-->
+                    <!--                            <div class="sidebar_section_title">Latest Courses</div>-->
+                    <!--                            <div class="sidebar_latest">-->
+
+                    <!--                                <div class="latest d-flex flex-row align-items-start justify-content-start">-->
+                    <!--                                    <div class="latest_image"><div><img src="images/latest_1.jpg" alt></div></div>-->
+                    <!--                                    <div class="latest_content">-->
+                    <!--                                        <div class="latest_title"><a href="course.html">How to Design a Logo a Beginners Course</a></div>-->
+                    <!--                                        <div class="latest_price">Free</div>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+
+                    <!--                                <div class="latest d-flex flex-row align-items-start justify-content-start">-->
+                    <!--                                    <div class="latest_image"><div><img src="images/latest_2.jpg" alt></div></div>-->
+                    <!--                                    <div class="latest_content">-->
+                    <!--                                        <div class="latest_title"><a href="course.html">Photography for Beginners Masterclass</a></div>-->
+                    <!--                                        <div class="latest_price">$170</div>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+
+                    <!--                                <div class="latest d-flex flex-row align-items-start justify-content-start">-->
+                    <!--                                    <div class="latest_image"><div><img src="images/latest_3.jpg" alt></div></div>-->
+                    <!--                                    <div class="latest_content">-->
+                    <!--                                        <div class="latest_title"><a href="course.html">The Secrets of Body Language</a></div>-->
+                    <!--                                        <div class="latest_price">$220</div>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+</div>
+
+<div th:replace="layout_user/layout :: footer">
+</div>
+<!--/////////////////////////////////  -->
+<div th:replace="layout_user/layout :: jquery">
+</div>
+</body>
+
+<!-- Mirrored from preview.colorlib.com/theme/unicat/course.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Sep 2023 05:05:52 GMT -->
+</html>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let courseId = /*[(${course.id})]*/ null;
+    /*]]>*/
+</script>
+<script th:src="@{/script/shopping-cart-ctrl.js}"></script>
+<script src="/script/user/sales_timer.js"></script>

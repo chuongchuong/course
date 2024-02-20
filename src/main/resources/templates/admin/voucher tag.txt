@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Voucher Cards</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .copy-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <div class="row col-5">
+    <div class="col-md-4 mb-4">
+      <div class="card position-relative">
+        <div class="card-body">
+          <h5 class="card-title">decript</h5>
+          <p class="card-text">- 15%</p>
+          <p class="card-text">Free shipping on all orders</p>
+          <button class="btn copy-button" onclick="copyVoucherCode(this)">
+            <img src="https://static.vecteezy.com/system/resources/previews/000/423/339/original/copy-icon-vector-illustration.jpg" alt="Copy icon" width="30" height="30">
+          </button>
+        </div>
+      </div>
+    </div>
+
+<script>
+  function copyVoucherCode(button) {
+    const voucherInfo = button.parentNode.getElementsByClassName('card-text')[0];
+    const tempInput = document.createElement('input');
+    tempInput.value = voucherInfo.textContent;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    alert('Copied the voucher code: ' + voucherInfo.textContent);
+  }
+</script>
+
+</body>
+</html>

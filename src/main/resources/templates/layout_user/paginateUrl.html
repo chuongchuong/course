@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <title>Unicat</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Unicat project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/user/styles/bootstrap4/bootstrap.min.css">
+    <link href="/user/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/user/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="/user/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+    <link rel="stylesheet" type="text/css" href="/user/plugins/OwlCarousel2-2.2.1/animate.css">
+
+
+    <!--
+
+
+
+
+      -->
+
+    <!--    <script nonce="596bb1b3-895a-442e-b950-1e557f2a5320">(function (w, d) { !function (a, b, c, d) { a[c] = a[c] || {}; a[c].executed = []; a.zaraz = { deferred: [], listeners: [] }; a.zaraz.q = []; a.zaraz._f = function (e) { return async function () { var f = Array.prototype.slice.call(arguments); a.zaraz.q.push({ m: e, a: f }) } }; for (const g of ["track", "set", "debug"]) a.zaraz[g] = a.zaraz._f(g); a.zaraz.init = () => { var h = b.getElementsByTagName(d)[0], i = b.createElement(d), j = b.getElementsByTagName("title")[0]; j && (a[c].t = b.getElementsByTagName("title")[0].text); a[c].x = Math.random(); a[c].w = a.screen.width; a[c].h = a.screen.height; a[c].j = a.innerHeight; a[c].e = a.innerWidth; a[c].l = a.location.href; a[c].r = b.referrer; a[c].k = a.screen.colorDepth; a[c].n = b.characterSet; a[c].o = (new Date).getTimezoneOffset(); if (a.dataLayer) for (const n of Object.entries(Object.entries(dataLayer).reduce(((o, p) => ({ ...o[1], ...p[1] })), {}))) zaraz.set(n[0], n[1], { scope: "page" }); a[c].q = []; for (; a.zaraz.q.length;) { const q = a.zaraz.q.shift(); a[c].q.push(q) } i.defer = !0; for (const r of [localStorage, sessionStorage]) Object.keys(r || {}).filter((t => t.startsWith("_zaraz_"))).forEach((s => { try { a[c]["z_" + s.slice(7)] = JSON.parse(r.getItem(s)) } catch { a[c]["z_" + s.slice(7)] = r.getItem(s) } })); i.referrerPolicy = "origin"; i.src = "../../cdn-cgi/zaraz/sd0d9.js?z=" + btoa(encodeURIComponent(JSON.stringify(a[c]))); h.parentNode.insertBefore(i, h) };["complete", "interactive"].includes(b.readyState) ? zaraz.init() : a.addEventListener("DOMContentLoaded", zaraz.init) }(w, d, "zarazData", "script"); })(window, document);</script>-->
+</head>
+<body>
+<!--Default-->
+
+<div class="row pagination_row" th:if="${totalPages > 1}"  th:fragment="default">
+    <div class="col">
+        <div class="pagination_container d-flex flex-row align-items-center justify-content-start">
+            <ul class="pagination_list">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{'/courses?page=0'}">&laquo;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i}? 'active'">
+                    <a th:href="@{'/courses?page=' + ${i}}" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{'/courses?page=' + ${totalPages - 1}}">&raquo;</a>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+
+<!--FindbyPrice-->
+
+<div class="row pagination_row" th:if="${totalPages > 1}"  th:fragment="findByPrice">
+    <div class="col">
+        <div class="pagination_container d-flex flex-row align-items-center justify-content-start">
+            <ul class="pagination_list">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{/find-by-price(page=0, minprice=${minprice}, maxprice=${maxprice})}">&laquo;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i}? 'active'">
+                    <a th:href="@{/find-by-price(page=${i}, minprice=${minprice}, maxprice=${maxprice})}" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{/find-by-price(page=${totalPages - 1}, minprice=${minprice}, maxprice=${maxprice})}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<!--sortASC-->
+<div class="row pagination_row" th:if="${totalPages > 1}" th:fragment="asc">
+    <div class="col">
+        <div class="pagination_container d-flex flex-row align-items-center justify-content-start">
+            <ul class="pagination_list">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{'/sorted-by-price-asc?page=0'}">&laquo;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i}? 'active'">
+                    <a th:href="@{'/sorted-by-price-asc?page=' + ${i}}" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{'/sorted-by-price-asc?page=' + ${totalPages - 1}}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<!--sortDESC-->
+<div class="row pagination_row" th:if="${totalPages > 1}" th:fragment="desc">
+    <div class="col">
+        <div class="pagination_container d-flex flex-row align-items-center justify-content-start">
+            <ul class="pagination_list">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{'/sorted-by-price-desc?page=0'}">&laquo;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i}? 'active'">
+                    <a th:href="@{'/sorted-by-price-desc?page=' + ${i}}" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{'/sorted-by-price-desc?page=' + ${totalPages - 1}}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--Search-->
+
+<div class="row pagination_row" th:if="${totalPages > 1}" th:fragment="search">
+    <div class="col">
+        <div class="pagination_container d-flex flex-row align-items-center justify-content-start">
+            <ul class="pagination_list">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{/search_courses(page=0, name=${#strings.isEmpty(name) ? null : name}, categoryId=${categoryId != null ? categoryId : 0})}">&laquo;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i}? 'active'">
+                    <a th:href="@{/search_courses(page=${i}, name=${#strings.isEmpty(name) ? null : name}, categoryId=${categoryId != null ? categoryId : 0})}" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{/search_courses(page=${totalPages - 1}, name=${#strings.isEmpty(name) ? null : name}, categoryId=${categoryId != null ? categoryId : 0})}">&raquo;</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<!--Khuyến Mãi-->
+
+<div class="row pagination_row" th:if="${totalPages > 1}"  th:fragment="sales">
+    <div class="col">
+        <div class="pagination_container d-flex flex-row align-items-center justify-content-start">
+            <ul class="pagination_list">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{'/courses/sales?page=0'}">&laquo;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i}? 'active'">
+                    <a th:href="@{'/courses/sales?page=' + ${i}}" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{'/courses/sales?page=' + ${totalPages - 1}}">&raquo;</a>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- ;Library-->
+
+<div class="row pagination_row" th:if="${totalPages > 1}"  th:fragment="library_default">
+    <div class="col">
+        <div class="pagination_container d-flex flex-row align-items-center justify-content-start">
+            <ul class="pagination_list">
+                <li th:if="${currentPage > 0}">
+                    <a th:href="@{'/library?page=0'}">&laquo;</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:class="${currentPage == i}? 'active'">
+                    <a th:href="@{'/library?page=' + ${i}}" th:text="${i + 1}"></a>
+                </li>
+                <li th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{'/library?page=' + ${totalPages - 1}}">&raquo;</a>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+
+<!--FindbyPrice-->
+
+
+
+
+<!--Search-->
+
+
+
+</body>
+</html>
